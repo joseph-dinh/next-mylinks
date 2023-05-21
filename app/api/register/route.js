@@ -3,7 +3,7 @@ import prisma from "../../libs/prismadb"
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
-    const body = request.json();
+    const body = await request.json();
     const { name, email, password } = body;
 
     if (!name || !email || !password) {
@@ -26,7 +26,9 @@ export async function POST(request) {
         data: {
             name,
             email,
-            password: hashedPassword
+            hashedPassword
         }
-    })
+    });
+
+    return NextResponse.json(user)
 }
