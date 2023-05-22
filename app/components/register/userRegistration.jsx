@@ -2,22 +2,35 @@
 
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function UserRegistration() {
     const [data, setData] = useState({name: "", email: "", password: ""});
+    const router = useRouter();
 
     const registerUser = async (e) => {
         e.preventDefault();
         
         fetch('/api/register', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json',
-            },
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         })
-        .then(() => toast.success("User has been registered!"))
-        .catch(() => toast.error("Something went wrong!"))
+        .then(async (response) => {
+          if (response.ok) {
+            // const userData = await response.json();
+            toast.success("Sucessfully registered");
+            router.push('/login');
+          } else {
+            const error = await response.text();
+            throw new Error(error);
+          }
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        });
     };
 
     return (
@@ -48,7 +61,7 @@ export default function UserRegistration() {
                     required
                     value={data.name}
                     onChange={e => setData({ ...data, name: e.target.value })}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 invalid:ring-2 invalid:ring-inset invalid:ring-red-600"
                   />
                 </div>
               </div>
@@ -64,9 +77,10 @@ export default function UserRegistration() {
                     type="email"
                     autoComplete="email"
                     required
+                    maxLength={64}
                     value={data.email}
                     onChange={e => setData({ ...data, email: e.target.value })}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 invalid:ring-2 invalid:ring-inset invalid:ring-red-600"
                   />
                 </div>
               </div>
@@ -84,9 +98,11 @@ export default function UserRegistration() {
                     type="password"
                     autoComplete="current-password"
                     required
+                    minLength={8}
+                    maxLength={64}
                     value={data.password}
                     onChange={e => setData({ ...data, password: e.target.value })}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 invalid:ring-2 invalid:ring-inset invalid:ring-red-600"
                   />
                 </div>
               </div>
@@ -100,13 +116,6 @@ export default function UserRegistration() {
                 </button>
               </div>
             </form>
-  
-            {/* <p className="mt-10 text-center text-sm text-gray-500">
-              Not a member?{' '}
-              <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                Start a 14 day free trial
-              </a>
-            </p> */}
           </div>
         </div>
       </>

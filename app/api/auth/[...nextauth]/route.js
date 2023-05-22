@@ -26,32 +26,23 @@ export const authOptions = {
       },
       async authorize(credentials) {
 
-        // Check if user entered email and password
         if (!credentials.email || !credentials.password) {
           throw new Error("Please enter an email and password");
         };
 
-        // Check if the email / user exists in database
         const user = await prisma.user.findUnique({
           where: {
             email: credentials.email
           }
         });
 
-        // If no user is found
         if (!user || !user?.hashedPassword) {
-          // throw new Error("No user found");
-          // For security purposes, leave generic error messages
           throw new Error("Incorrect email or password");
         };
 
-        // Check to see if password matches
         const passwordMatch = await bcrypt.compare(credentials.password, user.hashedPassword);
 
-        // If Passwords do not match
         if (!passwordMatch) {
-          // throw new Error("Incorrect password");
-          // For security purposes, leave generic error messages
           throw new Error("Incorrect email or password")
         };
 
