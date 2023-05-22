@@ -1,12 +1,24 @@
 "use client";
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
+import { AiFillGithub, AiFillGoogleCircle } from "react-icons/ai"
+import { useRouter } from "next/navigation";
 
 export default function UserLogin() {
+    const session = useSession();
+    console.log(session)
+    const router = useRouter();
+
     const [data, setData] = useState({
         email: "",
         password: "",
+    });
+
+    useEffect(() => {
+        if (session?.status === 'authenticated') {
+            router.push('/dashboard')
+        }
     });
 
     const loginUser = async (e) => {
@@ -91,6 +103,24 @@ export default function UserLogin() {
                 </button>
               </div>
             </form>
+            
+            <div className="mt-12 flex flex-col justify-center items-center gap-6">
+                <div className="flex flex-row min-w-full justify-between items-center">
+                    <div className="min-w-[30%] bg-gray-300 h-[1px]"/>
+                    <p className="text-sm font-medium leading-6 text-gray-900">Or continue with</p>
+                    <div className="min-w-[30%] bg-gray-300 h-[1px]"/>
+                </div>
+                <div className="flex flex-row min-w-full justify-between items-center">
+                    <button onClick={() => signIn('github')} className="flex min-w-[45%] justify-center rounded-md bg-slate-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600 gap-2">
+                        <AiFillGithub className="w-6 h-6"/>
+                        <span>GitHub</span>
+                    </button>
+                    <button onClick={() => signIn('google')} className="flex min-w-[45%] justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 gap-2">
+                        <AiFillGoogleCircle className="w-6 h-6"/>
+                        <span>Google</span>
+                    </button>
+                </div>
+            </div>
   
             <p className="mt-10 text-center text-sm text-gray-500">
               Not a member?{' '}
