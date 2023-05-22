@@ -49,6 +49,7 @@ model User {
   
   accounts      Account[]
   sessions      Session[]
+  userProfile   Profile?
 }
 
 model VerificationToken {
@@ -58,4 +59,20 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Profile {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String   @unique @db.ObjectId
+  displayName  String   @unique
+  socialLinks  SocialLink[]
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model SocialLink {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  profileId String  @unique @db.ObjectId
+  platform  String
+  url       String
+  profile   Profile @relation(fields: [profileId], references: [id])
 }

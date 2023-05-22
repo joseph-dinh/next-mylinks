@@ -23,11 +23,11 @@ export async function POST(request) {
     });
 
     if (existinguser) {
-      return new NextResponse("Email already exists", { status: 409 });
+        return new NextResponse("Email already exists", { status: 409 });
     }
 
     if (password.length < 8) {
-      return new NextResponse("Password must be at least 8 characters long", { status: 400 });
+        return new NextResponse("Password must be at least 8 characters long", { status: 400 });
     }
 
     if (!uppercaseRegex.test(password)) {
