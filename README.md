@@ -2,7 +2,16 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+Initialize variables in .env for
+
+DATABASE_URL
+NEXTAUTH_SECRET
+GITHUB_ID
+GITHUB_SECRET
+GOOGLE_ID
+GOOGLE_SECRET
+
+Then, run the development server:
 
 ```bash
 npm run dev
