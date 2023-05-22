@@ -2,6 +2,15 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+Initialize environment variables in .env for:
+
+DATABASE_URL
+NEXTAUTH_SECRET
+GITHUB_ID
+GITHUB_SECRET
+GOOGLE_ID
+GOOGLE_SECRET
+
 First, run the development server:
 
 ```bash
