@@ -71,7 +71,7 @@ model Profile {
 
 model SocialLink {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  profileId String  @unique @db.ObjectId
+  profileId String  @db.ObjectId
   platform  String
   url       String
   profile   Profile @relation(fields: [profileId], references: [id])
