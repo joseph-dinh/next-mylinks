@@ -1,11 +1,12 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "../../libs/prismadb";
-import { AiFillGithub, AiFillLinkedin } from "react-icons/ai";
+import ProfileLinks from "@/app/components/profile/profileLinks";
+import ProfileOptions from "@/app/components/profile/profileOptions";
 
 export default async function UserProfile(context) {
-  const session = await getServerSession(authOptions)
-  console.log(session);
+  const session = await getServerSession(authOptions);
+  var profileOwner = false;
 
   const profile = await prisma.Profile.findUnique({
     where: {
@@ -13,7 +14,20 @@ export default async function UserProfile(context) {
     }
   });
 
-  console.log(profile)
+  if (session) {
+    const user = await prisma.User.findUnique({
+      where: {
+        email: session?.user.email,
+      },
+      select: {
+        id: true,
+      }
+    });
+
+    if (user.id === profile.userId) {
+      profileOwner = true;
+    }
+  }
 
   const socialLinks = await prisma.socialLink.findMany({
     where: {
@@ -21,15 +35,8 @@ export default async function UserProfile(context) {
     }
   });
 
-  const platformIcons = {
-    github: AiFillGithub,
-    linkedin: AiFillLinkedin,
-  };
-
-  console.log(socialLinks)
-
   return (
-    <main className="p-5">
+    <main className="p-5 mx-auto max-w-2xl sm:px-6 lg:px-8">
       <div className="flex flex-col min-w-full">
         <div className="flex flex-row min-w-full min-h-full items-end justify-between">
           <h1 className="text-4xl font-bold">{profile?.displayName}</h1>
@@ -48,28 +55,15 @@ export default async function UserProfile(context) {
             <img src={`https://avatars.githubusercontent.com/u/118394420?v=4`} className="rounded-full min-w-full min-h-full"/>
           </div>
         </div>
-        {/* To Do: Add functionality for if displayName = session user's displayName & onClick functionality */}
-        <div className="mt-4 flex flex-row min-w-full font-bold justify-between items-center">
-          <button className="flex min-w-[49%] py-1 border border-neutral-300 shadow-sm justify-center items-center rounded-md hover:bg-neutral-100">Edit Profile</button>
-          <button className="flex min-w-[49%] py-1 border border-neutral-300 shadow-sm justify-center items-center rounded-md hover:bg-neutral-100">Share Profile</button>
-        </div>
-        
-        <div className="mt-8 flex flex-col gap-3">
-            {socialLinks && socialLinks.map((link, i) => {
-              const IconComponent = platformIcons[link?.platform];
-              return (
-                <div key={i} className="flex flex-row min-w-full px-3 py-2 gap-3 border border-neutral-300 shadow-sm justify-start items-center rounded-md hover:bg-neutral-100">
-                  <div className="aspect-square min-h-full w-10">
-                    <IconComponent className="min-w-full min-h-full"/>
-                  </div>
-                  <div className="flex flex-col">
-                    <h1 className="font-bold">{link?.platform}</h1>
-                    <h2 className="text-sm font-normal">{link?.url}</h2>
-                  </div>
-                </div>
-              )
-            })}
-        </div>
+        {profileOwner &&
+        // <div className="mt-4 flex flex-row min-w-full font-bold justify-between items-center">
+        //   <button className="flex min-w-[49%] py-1 border border-neutral-300 shadow-sm justify-center items-center rounded-md hover:bg-neutral-100">Edit Profile</button>
+        //   <button className="flex min-w-[49%] py-1 border border-neutral-300 shadow-sm justify-center items-center rounded-md hover:bg-neutral-100">Share Profile</button>
+        // </div>
+        <ProfileOptions/>
+        }
+
+        <ProfileLinks socialLinks={socialLinks}/>
 
       </div>
     </main>
