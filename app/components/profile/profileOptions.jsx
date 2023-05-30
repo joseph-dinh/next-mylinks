@@ -108,7 +108,7 @@ export default function ProfileOptions() {
                                 placeholder={`Link to ${data.platform}`}
                                 className="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 text-sm shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-neutral-600 sm:text-sm sm:leading-6"
                             />
-                            <HiLink className="h-full w-[5%] text-neutral-300 absolute left-2 top-0"/>
+                            <HiLink className="h-full w-6 text-neutral-300 absolute left-2 top-0"/>
                         </div>
                     </div>
 
@@ -131,7 +131,7 @@ export default function ProfileOptions() {
                                     placeholder="Title"
                                     className="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-neutral-600 sm:text-sm sm:leading-6 invalid:ring-2 invalid:ring-inset invalid:ring-red-600"
                                 />
-                                <MdTitle className="h-full w-[5%] text-neutral-300 absolute left-2 top-0"/>
+                                <MdTitle className="h-full w-6 text-neutral-300 absolute left-2 top-0"/>
                             </div>
                         </div>
                     ) : null}

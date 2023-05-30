@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import prisma from "../../libs/prismadb";
+import prisma from "../../../libs/prismadb";
 import ProfileLinks from "@/app/components/profile/profileLinks";
 import ProfileOptions from "@/app/components/profile/profileOptions";
 
