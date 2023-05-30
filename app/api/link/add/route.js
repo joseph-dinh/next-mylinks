@@ -28,7 +28,7 @@ export async function POST(request) {
 
     if (!session) {
         return new NextResponse("Unauthorized", { status: 401 });
-    }
+    };
 
     try {
         const userWithProfile = await prisma.user.findUnique({
@@ -47,34 +47,34 @@ export async function POST(request) {
 
         if (!platform || !url) {
             return new NextResponse("Missing Fields", { status: 400 });
-        }
+        };
 
         const existingLink = await prisma.SocialLink.findFirst({
             where: {
-            profileId: profileId,
-            platform: platform,
-            url: url,
+                profileId: profileId,
+                platform: platform,
+                url: url,
             },
         });
 
         if (existingLink) {
             return new NextResponse("Link already exists", { status: 409 });
-        }
+        };
 
         if (!platforms.includes(platform)) {
             return new NextResponse("Invalid platform", { status: 400 });
-        }
+        };
 
         if (!urlRegex.test(url)) {
             return new NextResponse("Invalid link format", { status: 400 });
-        }
+        };
 
         const newLink = await prisma.SocialLink.create({
             data: {
-            profileId: profileId,
-            platform: platform,
-            url: url,
-            title: title,
+                profileId: profileId,
+                platform: platform,
+                url: url,
+                title: title,
             },
         });
 

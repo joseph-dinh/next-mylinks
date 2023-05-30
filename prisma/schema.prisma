@@ -65,6 +65,7 @@ model Profile {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   userId       String   @unique @db.ObjectId
   displayName  String   @unique
+  biography    String?
   socialLinks  SocialLink[]
   user         User     @relation(fields: [userId], references: [id])
 }

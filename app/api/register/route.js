@@ -2,10 +2,11 @@ import bcrypt from "bcrypt";
 import prisma from "../../libs/prismadb";
 import { NextResponse } from "next/server";
 
-const symbolRegex = /[$-/:-?{-~!"^_`\[\]]/;
+const symbolRegex = /[!@#$%^&*()-_=+\{\}\[\]:;'",./\\<>?~|]/;
 const numberRegex = /\d/;
 const uppercaseRegex = /[A-Z]/;
 const lowercaseRegex = /[a-z]/;
+const nameRegex = /^[A-Za-z-._0-9]+$/;
 
 export async function POST(request) {
   try {
@@ -44,6 +45,10 @@ export async function POST(request) {
 
     if (!numberRegex.test(password)) {
         return new NextResponse("Password must contain at least 1 number", { status: 400 });
+    }
+
+    if (!nameRegex.test(name)) {
+      return new NextResponse("Invalid name", { status: 400 });
     }
     
     const hashedPassword = await bcrypt.hash(password, 10);
